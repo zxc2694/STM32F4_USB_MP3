@@ -239,7 +239,8 @@ static void AudioCallback(void *context, int buffer) {
 
 		// Duplicate data in case of mono to maintain playback speed
 		if (mp3FrameInfo.nChans == 1) {
-			for(int i = mp3FrameInfo.outputSamps;i >= 0;i--) 	{
+			int i;
+			for(i = mp3FrameInfo.outputSamps;i >= 0;i--) 	{
 				samples[2 * i]=samples[i];
 				samples[2 * i + 1]=samples[i];
 			}

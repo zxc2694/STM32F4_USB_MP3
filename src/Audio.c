@@ -79,7 +79,8 @@ void InitializeAudio(int plln, int pllr, int i2sdiv, int i2sodd) {
 
 	// Reset the codec.
 	GPIOD ->BSRRH = 1 << 4;
-	for (volatile int i = 0; i < 0x4fff; i++) {
+	volatile int i;
+	for (i = 0; i < 0x4fff; i++) {
 		__asm__ volatile("nop");
 	}
 	GPIOD ->BSRRL = 1 << 4;
