@@ -36,7 +36,7 @@ CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -nostartfiles -mcpu=cortex-m
 
 ifeq ($(FLOAT_TYPE), hard)
 CFLAGS += -fsingle-precision-constant -Wdouble-promotion
-CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=soft
 else
 CFLAGS += -msoft-float
 endif

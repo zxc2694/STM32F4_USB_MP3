@@ -22,7 +22,7 @@ CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -mcpu=cortex-m4
 
 ifeq ($(FLOAT_TYPE), hard)
 CFLAGS += -fsingle-precision-constant -Wdouble-promotion
-CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=hard
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=soft
 #CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=softfp
 else
 CFLAGS += -msoft-float
