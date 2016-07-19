@@ -9,24 +9,9 @@ SRCS += usbh_usr.c usb_bsp.c
 
 # Project name
 PROJ_NAME=stm32F4_usb_mp3
-OUTPATH=build
 
 ###################################################
 
-# Check for valid float argument
-# NOTE that you have to run make clan after
-# changing these as hardfloat and softfloat are not
-# binary compatible
-ifneq ($(FLOAT_TYPE), hard)
-ifneq ($(FLOAT_TYPE), soft)
-override FLOAT_TYPE = hard
-#override FLOAT_TYPE = soft
-endif
-endif
-
-###################################################
-
-#BINPATH=~/sat/bin
 CC=arm-none-eabi-gcc
 OBJCOPY=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
@@ -34,14 +19,8 @@ SIZE=arm-none-eabi-size
 CFLAGS  = -std=gnu99 -g -O2 -Wall -Tstm32_flash.ld
 CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -nostartfiles -mcpu=cortex-m4
 
-ifeq ($(FLOAT_TYPE), hard)
 CFLAGS += -fsingle-precision-constant -Wdouble-promotion
 CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=soft
-else
-CFLAGS += -msoft-float
-endif
-
-###################################################
 
 vpath %.c src
 vpath %.a lib
@@ -79,22 +58,24 @@ OBJS = $(SRCS:.c=.o)
 .PHONY: lib proj
 
 all: lib proj
-	$(SIZE) $(OUTPATH)/$(PROJ_NAME).elf
+	$(SIZE) $(PROJ_NAME).elf
 
 lib:
 	$(MAKE) -C lib FLOAT_TYPE=$(FLOAT_TYPE)
 
-proj: 	$(OUTPATH)/$(PROJ_NAME).elf
+proj: 	$(PROJ_NAME).elf
 
-$(OUTPATH)/$(PROJ_NAME).elf: $(SRCS)
+$(PROJ_NAME).elf: $(SRCS)
 	$(CC) $(CFLAGS) $^ -o $@ $(LIBPATHS) $(LIBS)
-	$(OBJCOPY) -O ihex $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).hex
-	$(OBJCOPY) -O binary $(OUTPATH)/$(PROJ_NAME).elf $(OUTPATH)/$(PROJ_NAME).bin
+	$(OBJCOPY) -O ihex $(PROJ_NAME).elf $(PROJ_NAME).hex
+	$(OBJCOPY) -O binary $(PROJ_NAME).elf $(PROJ_NAME).bin
 
+flash:
+	st-flash write $(PROJ_NAME).bin 0x8000000
 clean:
 	rm -f *.o
-	rm -f $(OUTPATH)/$(PROJ_NAME).elf
-	rm -f $(OUTPATH)/$(PROJ_NAME).hex
-	rm -f $(OUTPATH)/$(PROJ_NAME).bin
+	rm -f $(PROJ_NAME).elf
+	rm -f $(PROJ_NAME).hex
+	rm -f $(PROJ_NAME).bin
 	$(MAKE) clean -C lib # Remove this line if you don't want to clean the libs as well
 	
