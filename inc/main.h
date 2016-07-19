@@ -1,23 +1,16 @@
-/*
- * main.h
- *
- *  Created on: 10 jul 2012
- *      Author: BenjaminVe
- */
+/* Define to prevent recursive inclusion -------------------------------------*/
+#ifndef __MAIN_H
+#define __STM32F4_DISCOVERY_DEMO_H
 
-#ifndef MAIN_H_
-#define MAIN_H_
-
-#include "stm32f4xx.h"
+/* Includes ------------------------------------------------------------------*/
+#include "stm32f4_discovery.h"
 #include <stdio.h>
-#include "stm32f4xx_it.h"
-#include "usb_hcd_int.h"
-#include "usbh_usr.h"
-#include "usbh_core.h"
-#include "usbh_msc_core.h"
 
-// Function prototypes
-void TimingDelay_Decrement(void);
-void Delay(volatile uint32_t nTime);
+/* Exported macro ------------------------------------------------------------*/
+#define ABS(x)         (x < 0) ? (-x) : x
+#define MAX(a,b)       (a < b) ? (b) : a
 
-#endif /* MAIN_H_ */
+/* Exported functions ------------------------------------------------------- */
+
+
+#endif /* __MAIN_H */

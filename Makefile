@@ -1,26 +1,31 @@
+# Project name
+PROJ_NAME=stm32F4_usb_mp3
+
 # Sources
 SRCS = main.c stm32f4xx_it.c system_stm32f4xx.c syscalls.c
 
 # Audio
-SRCS += Audio.c
+SRCS += Audio.c mp3.c
 
 # USB
 SRCS += usbh_usr.c usb_bsp.c
 
-# Project name
-PROJ_NAME=stm32F4_usb_mp3
-
+# FreeRTOS
+FREERTOS_SRC = ./lib/FreeRTOS
+FREERTOS_INC = $(FREERTOS_SRC)/include/  
+FREERTOS_PORT_INC = $(FREERTOS_SRC)/portable/GCC/ARM_$(ARCH)/
 ###################################################
 
 CC=arm-none-eabi-gcc
 OBJCOPY=arm-none-eabi-objcopy
 SIZE=arm-none-eabi-size
+ARCH=CM4F
 
 CFLAGS  = -std=gnu99 -g -O2 -Wall -Tstm32_flash.ld
 CFLAGS += -mlittle-endian -mthumb -mthumb-interwork -nostartfiles -mcpu=cortex-m4
 
 CFLAGS += -fsingle-precision-constant -Wdouble-promotion
-CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=soft
+CFLAGS += -mfpu=fpv4-sp-d16 -mfloat-abi=softfp
 
 vpath %.c src
 vpath %.a lib
@@ -30,6 +35,9 @@ ROOT=$(shell pwd)
 # Includes
 CFLAGS += -Iinc -Ilib/Core/cmsis -Ilib/Core/stm32
 CFLAGS += -Ilib/Conf
+CFLAGS+=-I$(FREERTOS_INC)
+CFLAGS+=-I$(FREERTOS_PORT_INC)
+CFLAGS+=-I./lib/Utilities/STM32F4-Discovery
 
 # Library paths
 LIBPATHS = -Llib/StdPeriph -Llib/USB_OTG
@@ -49,7 +57,9 @@ CFLAGS += -Ilib/fat_fs/inc
 CFLAGS += -Ilib/helix/pub
 
 # add startup file to build
-SRCS += lib/startup_stm32f4xx.s
+SRCS += lib/startup_stm32f4xx.s ./lib/Utilities/STM32F4-Discovery/stm32f4_discovery.c \
+		$(FREERTOS_SRC)/tasks.c $(FREERTOS_SRC)/list.c $(FREERTOS_SRC)/portable/MemMang/heap_1.c \
+		$(FREERTOS_SRC)/portable/GCC/ARM_$(ARCH)/port.c 
 
 OBJS = $(SRCS:.c=.o)
 
