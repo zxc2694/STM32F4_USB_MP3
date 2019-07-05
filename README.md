@@ -45,7 +45,7 @@ Compile it under windows, setting correct PATH ARM-GCC first.
  - sudo make install
 ```
 
-3. Usage:
+4. Burn to board:
 ```
  - make
  
