@@ -30,7 +30,7 @@ Compile it under windows, setting correct PATH ARM-GCC first.
 ```
 3. Install openocd:
 ```
- - https://github.com/ntfreak/openocd
+ - git clone https://github.com/ntfreak/openocd
  
  - cd openocd
  
